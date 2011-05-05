@@ -2,7 +2,7 @@
  * File: jelvm-as.c
  * Implements:
  *
- * Copyright: Jens Låås, 2010
+ * Copyright: Jens Låås, 2011
  * Copyright license: According to GPL, see file COPYING in this directory.
  *
  */
