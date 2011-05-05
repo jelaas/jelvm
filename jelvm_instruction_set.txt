@@ -1,0 +1,140 @@
+ The jelvm instruction set
+---------------------------
+
+The instruction set of the virtual machine follows.
+
+rN      -- register N.
+W       -- wordsize. One of 'b', 's', 'w', 'l'.
+           b = 8 bits. s = 16 bits. w = 32 bits. l = 64 bits.
+DATA    -- Value in digits. Prefix 0x is supported.
+OFFSET  -- Value in digits. Prefix 0x is supported.
+
+The first line is the byte offsets of the compiled instruction.
+The second line is the opcode (in hex) followed by the other parts of the instruction with sized
+ that can be inferred from the first line of offsets.
+The third line is a synopsis of the assembler instruction that the as-jelvm assembler accepts.
+
+ Instructions
+---------------------------------
+0  1  2    4    6
+10 WW REGA REGB
+   move.W rA,rB
+      Copy contents of rA to rB.
+
+0  1  2    4    6
+11 WW REGA REGB
+   add.W rA,rB
+      Add contents of rA to rB.
+      rB = rB + rA
+
+0  1  2    4    6
+12 WW REGA REGB
+   sub.W rA,rB
+      Subtract contents of rA from rB.
+      rB = rB - rA.
+
+0  1  2    4    6
+13 WW REGA DATA
+   lsl.W rA,DATA
+      Logical shift left rA, DATA nr of bits.
+      rA << DATA.
+
+0  1  2    4    6
+14 WW REGA DATA
+   lsr.W rA,DATA
+      Logical shift right rA, DATA nr of bits.
+      rA >> DATA.
+
+0  1  2    4
+15 WW REGA
+   not.W rA
+
+0  1  2    4    6
+16 WW REGA REGB
+   eor.W rA,rB
+
+0  1  2    4    6
+17 WW REGA REGB
+   and.W rA,rB
+
+0  1  2    4    6
+18 WW REGA REGB
+   or.W rA,rB
+
+0  1  2    4    6	10
+30 WW REGA REGB OFFSET
+   store.W rA,OFFSET(rB)
+
+0  1  2    4    6	10
+31 WW REGA REGB OFFSET
+   load.W  OFFSET(rA),rB
+   Transfer contents at address rA+OFFSET to register rB.
+
+0  1  2    4
+32 WW REGA
+   jmp.W rA
+   Jump to address contained in rA.
+
+0  1  2    4    6
+33 WW REGA REGB
+   jeq.W rA,rB
+      Jump to rB if rA.W is zero.
+
+0  1  2    4    6
+34 WW REGA REGB
+   jne.W rA,rB
+      Jump to rB if rA.W is non-zero.
+
+0  1  2    4    12
+50 WW REGA DATA
+   addrof.l rN,DATA
+   addrof.l rN,&LABEL
+
+0  1  2    4    12
+51 WW REGA DATA
+set.W rA DATA
+      Set rA to DATA.
+
+0  1  2    4    12
+52 WW REGA DATA
+      inc.W rA,DATA
+
+0  1  2    4    12
+53 WW REGA DATA
+      dec.W rA,DATA
+
+0  1  2    10
+54 WW OFFSET
+      bra.W OFFSET
+      	 Jump to PC+OFFSET.
+
+0  1  2    4    12
+55 WW REGA OFFSET
+      beq.W rA,OFFSET
+      	 Jump to PC+OFFSET if rA is zero.
+
+0  1  2    4    12
+56 WW REGA OFFSET
+      bne.W rA,OFFSET
+      	 Jump to PC+OFFSET if rA is non-zero.
+
+0  1  2    4
+70 WW SYSCALL
+      syscall.l &SYSCALL
+         Perform systemcall.
+	 Args to systemcall are contents of registers 2 and up.
+	 Result is saved in register 0.
+	 Errno is saved in register 1.
+
+0  1  2    4
+71 WW REGA
+      call.l rA
+          Make a C function call: reg[0] = (rA)(&regs)
+	  The C function takes a single argument:
+	       (uint64_t *regs) a pointer to the register array.
+	  Result is saved in register 0.
+
+0  1  2    10
+72 WW DATA
+      errno.W DATA
+      	  Set errno to value DATA.
