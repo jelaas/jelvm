@@ -1,0 +1,32 @@
+jelvm is a small virtual machine interpreter.
+
+The aim is to have a small vm that can be targeted by high level language compilers.
+Performance is not the first priority. Simplicity is important.
+It is possible to call C functions from the vm code.
+There is a system call interface for performing kernel system calls.
+An assembler is included: see "jelvm_instruction_set.txt" and the as-jelvm program.
+
+You can easily include the vm in any C program and execute jelvm code via a simple function call.
+
+Project status: In progress. The 'helloworld.s' program compiles and runs correctly.
+		Bugs need to be found and corrected. More documentation to write.
+		Larger example program needed.
+
+--------------------------------------------------------------
+jelvm [-h] [-v] [-D] [program]
+  -h  display this help
+  -v  verbose
+  -D  debugging information concerning the virtual machine
+
+jelvm reads compiled code from <program> or from stdin.
+Execution via the #! format is supported.
+
+as-jelvm [-h] [-v] [-D]
+  -h  display this help
+  -v  verbose
+  -D  debugging information concerning the assembler
+
+as-jelvm reads assembler sourcecode from stdin.
+Outputs compiled code to stdout.
+Ex: as-jelvm < source.s > prg
+
