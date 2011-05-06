@@ -360,6 +360,12 @@ static char *syscalls[] = {
   "waitpid",
   "write",
   "writev",
+  "socket",
+  "accept",
+  "bind",
+  "listen",
+  "connect",
+  "sleep",
   NULL
 };
 
@@ -738,7 +744,7 @@ static int as(int *len,void (*info)(const char *istr), void (*oputc)(void *ctx, 
 			continue;
 		}
 		op = parse_op(t->value);
-		printinfo("INF: %d: op %s: %d", t->line, t->value, op);
+		printinfo("INF: %d: op %s: %x", t->line, t->value, op);
 		if( (t = jl_next(t)) == NULL) {
 			printinfo("ERR: %d: missing token", line);
 			return -1;
