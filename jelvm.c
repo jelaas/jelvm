@@ -291,7 +291,10 @@ static int jelvm_exec_regs(uint64_t *regs, void *code, uint64_t *iv, int ivlen, 
 		case OP_BRA:
 			pc++;
 			value = get64(&pc);
-			pc = pc + value;
+			if(flags & JELVM_TRACE)  printinfo("DBG:bra %p + %llu => %p",
+							   pc - 8, value,
+							   pc - 8 + value);
+			pc = pc + value - 8;
 			continue;
 		case OP_ERRNO:
 			pc++;
