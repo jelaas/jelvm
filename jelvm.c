@@ -30,8 +30,6 @@
 
 #include "jelvm.h"
 
-static int jelvm_exec_regs(uint64_t *regs, void *code, uint64_t *iv, int ivlen, unsigned int flags, void (*info)(const char *istr));
-
 #define ntohll(x) (((uint64_t)(ntohl((int)((x << 32) >> 32))) << 32) | (unsigned int)ntohl(((int)(x >> 32)))) //By Runner
 #define htonll(x) ntohll(x)
 
@@ -152,7 +150,7 @@ uint64_t get64(uint8_t **pc)
 
 #define printinfo( ARGS... ) {snprintf(istr, sizeof(istr), ## ARGS); info(istr);}
 
-static int jelvm_exec_regs(uint64_t *regs, void *code, uint64_t *iv, int ivlen, unsigned int flags, void (*info)(const char *istr))
+int jelvm_exec_regs(uint64_t *regs, void *code, uint64_t *iv, int ivlen, unsigned int flags, void (*info)(const char *istr))
 {
 	int j;
 	uint8_t *pc;

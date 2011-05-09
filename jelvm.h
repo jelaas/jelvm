@@ -433,5 +433,6 @@ enum {
 };
 
 int jelvm_exec(void *code, uint64_t *iv, int ivlen, unsigned int flags, void (*info)(const char *istr));
+int jelvm_exec_regs(uint64_t *regs, void *code, uint64_t *iv, int ivlen, unsigned int flags, void (*info)(const char *istr));
 
 #endif
